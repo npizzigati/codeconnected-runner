@@ -1,0 +1,2 @@
+# Builds image on remote container
+docker --context codeconnected-runner build -t myrunner .
