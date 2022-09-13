@@ -19,14 +19,25 @@ replServer.defineCommand('runUserCode', {
         const stats = fs.statSync(file);
         if (stats && stats.isFile()) {
           const origWriter = this.writer;
-          // Don't show return value
-          this.writer = (output) => '';
+          // Use custom writer so as to not show return values
+          this.writer = (output) => {
+            if (output === null) {
+              return '';
+            }
+            return util.inspect(output);
+          };
           this.editorMode = true;
           const data = fs.readFileSync(file, 'utf8');
           this.write(data);
+          // Add "null" on a newline at the end of the lines to
+          // be executed, so that return value is null in all
+          // cases (which will be disregarded by our own custom
+          // output writer)
+          this.write('\nnull;');
           this.editorMode = false;
-          this.write('\n')
-          // Restore showing of return value
+          this.write('\n');
+          // Restore writer so repl shows return values when used
+          // as a repl
           this.writer = origWriter;
         } else {
           this.outputStream.write(
