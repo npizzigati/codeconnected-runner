@@ -8,24 +8,24 @@ const replServer = repl.start({ preview: false });
 
 replServer.defineCommand('runUserCode', {
     help: '',
-    action: function(file) { 
+    action: function(file) {
       this.clearLine();
       // Clear repl variables and constants
       this.clearBufferedCommand();
       if (!this.useGlobal) {
         this.resetContext();
-      } 
+      }
 
       try {
         const stats = fs.statSync(file);
         if (stats && stats.isFile()) {
-	  const origWriter = this.writer;
+          const origWriter = this.writer;
           // Don't show return value
           this.writer = (output) => '';
-	  this.editorMode = true; 
+          this.editorMode = true;
           const data = fs.readFileSync(file, 'utf8');
           this.write(data);
-	  this.editorMode = false; 
+          this.editorMode = false;
           this.write('\n')
           // Restore showing of return value
           this.writer = origWriter;
@@ -37,8 +37,8 @@ replServer.defineCommand('runUserCode', {
       } catch (err) {
         this.outputStream.write(`Failed to load: ${file}. Err: ${err}`);
       }
-      // Handle case where user has run a setTimeout with output and no specified time	    
-      setTimeout(() => this.displayPrompt(), 300)	    
+      // Handle case where user has run a setTimeout with output and no specified time
+      setTimeout(() => this.displayPrompt(), 300);
       this.displayPrompt();
       this.history = [];
     }
@@ -46,7 +46,7 @@ replServer.defineCommand('runUserCode', {
 
 replServer.defineCommand('deleteHistory', {
     help: '',
-    action: function() { 
+    action: function () {
       this.clearLine();
       this.displayPrompt();
       this.history = [];
@@ -56,7 +56,7 @@ replServer.defineCommand('deleteHistory', {
 replServer.defineCommand('help', {
   help: 'Print this help message',
   action: function() {
-    const hide = ['runUserCode', 'deleteHistory'];	  
+    const hide = ['runUserCode', 'deleteHistory'];
     const names = Object.keys(this.commands).sort();
     const longestNameLength = names.reduce(
       (max, name) => Math.max(max, name.length),
@@ -65,7 +65,7 @@ replServer.defineCommand('help', {
     for (let n = 0; n < names.length; n++) {
       const name = names[n];
       if (hide.includes(name)) {
-	continue;
+        continue;
       }
       const cmd = this.commands[name];
       const spaces = ' '.repeat(longestNameLength - name.length + 3);
@@ -76,4 +76,4 @@ replServer.defineCommand('help', {
       '^D to exit the repl\n');
     this.displayPrompt();
   }
-}); 
+});
