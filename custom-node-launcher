@@ -8,14 +8,13 @@ const replServer = repl.start({ preview: false });
 
 replServer.defineCommand('runUserCode', {
     help: '',
-    action: function(file) {
+    action: function (file) {
       this.clearLine();
       // Clear repl variables and constants
       this.clearBufferedCommand();
       if (!this.useGlobal) {
         this.resetContext();
       }
-
       try {
         const stats = fs.statSync(file);
         if (stats && stats.isFile()) {
@@ -55,7 +54,7 @@ replServer.defineCommand('deleteHistory', {
 
 replServer.defineCommand('help', {
   help: 'Print this help message',
-  action: function() {
+  action: function () {
     const hide = ['runUserCode', 'deleteHistory'];
     const names = Object.keys(this.commands).sort();
     const longestNameLength = names.reduce(
