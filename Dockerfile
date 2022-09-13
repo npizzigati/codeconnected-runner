@@ -3,6 +3,7 @@ RUN apt update
 RUN apt -y install curl
 RUN apt -y install sudo
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+RUN apt update
 RUN apt -y install nodejs
 RUN apt -y install ruby
 RUN apt -y install pry
