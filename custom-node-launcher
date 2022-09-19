@@ -21,6 +21,8 @@ replServer.defineCommand('runUserCode', {
           const origWriter = this.writer;
           // Use custom writer so as to not show return values
           this.writer = (output) => {
+            // Scripts run from code editor will always return
+            // null, so do not print return value if this is the case
             if (output === null) {
               return '';
             }
